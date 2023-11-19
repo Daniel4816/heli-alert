@@ -112,7 +112,7 @@ func main() {
 	bot.Send(msg)
 	for true {
 
-		conn, err := net.Dial("tcp", "10.0.0.20:30003")
+		conn, err := net.Dial("tcp", "127.0.0.1:30003")
 		if err != nil {
 			msg := tgbotapi.NewMessage(int64(<channel-id>), "")
 			msg.Text = "ERROR \"critical error\" shutting down"
