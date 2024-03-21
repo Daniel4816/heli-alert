@@ -73,6 +73,8 @@ func main() {
 		planetimeAddedTimer[i] = time.Now().Add(-61 * time.Minute)
 		planetimeAddedTimerHour[i] = time.Now().Add(-61 * time.Minute)
 	}
+	var aliveping time.Time
+	aliveping = time.Now()
 	var apicheck time.Time
 	apicheck = time.Now().Add(-80 * time.Second)
 	var counter int
@@ -160,7 +162,7 @@ func main() {
 			ispolice, _ = regexp.MatchString(`OE-B`, planeTagStr)
 			if time.Now().After(apicheck.Add(300 * time.Second)) {
 				msg := tgbotapi.NewMessage(int64(<channel-id>), "")
-				msg.Text = "ERROR \"no updates\" API might not be working properly or no aircafts are getting detected in the airspace"
+				msg.Text = "WARNING \"no updates\" API might not be working properly or no aircafts are currently in the airspace"
 				bot.Send(msg)
 				if counter >= 5 {
 					time.Sleep(1 * time.Minute)
@@ -169,6 +171,13 @@ func main() {
 				counter++
 			}
 			apicheck = time.Now()
+
+			if time.Now().After(aliveping.Add(10 * time.Minute)) {
+				msg := tgbotapi.NewMessage(int64(<channel-id>), "")
+				msg.Text = fmt.Sprintf("Test ping\nI am up and running\nTest data: %s %s", HexIdStr, planeTagStr)
+				bot.Send(msg)
+				aliveping = time.Now()
+			}
 
 			if isheli && ispolice {
 				tenmintimer = false
